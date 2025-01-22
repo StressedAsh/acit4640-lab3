@@ -12,6 +12,9 @@ key_name="bcitkey"
 vpc_id=$(aws ec2 create-vpc --cidr-block $vpc_cidr --query 'Vpc.VpcId' --output text --region $region)
 aws ec2 create-tags --resources $vpc_id --tags Key=Name,Value=MyVPC --region $region
 
+# Wait for the creation of VPC
+aws ec2 wait vpc-exists --vpc-ids $vpc_id
+
 # enable dns hostname
 aws ec2 modify-vpc-attribute --vpc-id $vpc_id --enable-dns-hostnames Value=true
 
