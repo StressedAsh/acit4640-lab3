@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+KEY_NAME="bcitkey"
+PUBLIC_KEY_PATH="~/.ssh/id_rsa.pub"
+REGION="us-east-1"
+
+aws ec2 import-key-pair \
+    --key-name "$KEY_NAME" \
+    --public-key-material fileb://$PUBLIC_KEY_PATH \
+    --region "$REGION"
+
+if [ $? -eq 0 ]; then
+    echo "Public key imported successfully"
+else
+    echo "Error importing public key"
+    exit 1
+fi
