@@ -1,28 +1,23 @@
 #!/usr/bin/env bash
 
 # Check if the number of command-line arguments is correct
-if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
-    echo "Usage: $0 <bucket_name> [region]"
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <bucket_name>"
     exit 1
 fi
 
 # pass the bucket name and the region as positional parameters
 bucket_name=$1
-region=${2:-us-east-1}
 
 # Check if the bucket exists
 if aws s3api head-bucket --bucket "$bucket_name" 2>/dev/null; then
     echo "Bucket $bucket_name already exists."
 else
     # change the line below
-    if [ "$region" = "us-east-1" ]; then
-        aws s3api create-bucket --bucket "$bucket_name"
-    else
-        aws s3api create-bucket \
-            --bucket "$bucket_name" \
-            --region "$region" \
-            --create-bucket-configuration LocationConstraint="$region"
-    fi
+    aws s3api create-bucket \
+        --bucket "$bucket_name" \
+        --region "us-west-2" \
+        --create-bucket-configuration LocationConstraint="us-west-2"
 
     if [ $? -eq 0 ]; then
         echo "Bucket created successfully"
